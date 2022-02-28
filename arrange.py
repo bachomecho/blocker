@@ -39,13 +39,15 @@ for x in domains:
 	core += x
 print(core)
 
-file = open("hosts", "w")
+def main() -> None:
+	file = open("hosts", "w")
+	file.writelines(core)
+	file.close()
 
-file.writelines(core)
-
-file.close()
-
+main()
 time.sleep(3)
 
-shutil.copy('hosts', "C:\\Windows\\System32\\drivers\\etc")
-
+# replaces the hosts file in drivers/etc
+def replace_hosts() -> None:
+	shutil.copy('hosts', "C:\\Windows\\System32\\drivers\\etc")
+replace_hosts()
