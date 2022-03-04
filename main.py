@@ -1,14 +1,15 @@
 import tkinter as tk
 from tkinter import ttk
-from tkinter.messagebox import showinfo
+from tkinter.filedialog import askopenfile
 
 class App(tk.Tk):
     def __init__(self):
         super().__init__()
     
-        self.title("Freedom Block")
+        self.title("Degenerate Blocker")
         self.geometry("580x300")
         self.configure(bg='white')
+        self.bind("<Return>", self.display)
 
         # Text Box
         self.text_box = tk.Text(self, width=30, height=30, padx=15, pady=15)
@@ -30,7 +31,7 @@ class App(tk.Tk):
 
         # Button load text file
         self.load_text = tk.StringVar()
-        self.load_button = tk.Button(self, textvariable=self.load_text, command=self.display, padx=30, bg='white')
+        self.load_button = tk.Button(self, textvariable=self.load_text, command=lambda:self.load_file(), padx=30, bg='white')
         self.load_text.set("Load file")
         self.load_button.place(relx=0.8, rely=0.5, anchor='n')
 
@@ -38,17 +39,29 @@ class App(tk.Tk):
                             bg='red', fg='white', padx=30)
         self.block_button.place(relx=0.8, rely=0.7, anchor='n')
 
-    def display(self) -> None:
+    # display entries in text box
+    def display(self, event) -> None:
         self.text_box.insert(tk.END, self.entry.get() + '\n')
         self.entry.delete(0, tk.END)
-
+    
+    # load file button functionality
+    def load_file(self) -> None:
+        self.load_text.set("Loading...")
+        file = askopenfile(mode='rb', title="Choose a file", filetype=[("Text file", "*.txt")])
+        if(file):
+            print("file chosen successfully.")
+            read_file = file.read()
+            self.text_box.insert(tk.END, read_file)
+            self.load_text.set("Load file")
+    
+    # block button functionality
     def read_text(self) -> None:
         
         domains = self.text_box.get("1.0", tk.END)
         
         domains = domains.split("\n")
 
-        del domains[-2:]
+        domains = [x for x in domains if len(x) > 0]
         
         def change(str_: str) -> str:
             str_ = f"127.0.0.1\t{str_}\n127.0.0.1\twww.{str_}\n"
