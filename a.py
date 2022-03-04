@@ -1,15 +1,19 @@
 import shutil, time
 
-with open("block.txt", "r") as file:
-	domains = file.readlines()
-
-domains = [x.strip() for x in domains]
+def open_file() -> list:
+	with open("block.txt", "r") as file:
+		domains = file.readlines()
+	domains = [x.strip() for x in domains]
+	return domains
 
 def change(str_: str) -> str:
 	str_ = f"127.0.0.1\t{str_}\n127.0.0.1\twww.{str_}\n"
 	return str_
 
-domains = list(map(change, domains))
+def apply_changes(dm: list) -> list:
+	dm = list(map(change, dm))
+	return dm
+
 
 core = '''# Copyright (c) 1993-2009 Microsoft Corp.
 #
@@ -34,20 +38,24 @@ core = '''# Copyright (c) 1993-2009 Microsoft Corp.
 #	::1             localhost
 
 '''
-
-for x in domains:
-	core += x
-print(core)
+def core_text(dm: list, cr: str) -> str:
+	for x in dm:
+		cr += x
+	return cr
 
 def main() -> None:
+	domains = open_file()
+	domains = apply_changes(domains)
+	hosts_text = core_text(domains, core)
+
 	file = open("hosts", "w")
-	file.writelines(core)
+	file.writelines(hosts_text)
 	file.close()
 
 main()
 time.sleep(3)
 
 # replaces the hosts file in drivers/etc
-def replace_hosts() -> None:
-	shutil.copy('hosts', "C:\\Windows\\System32\\drivers\\etc")
-replace_hosts()
+#def replace_hosts() -> None:
+#	shutil.copy('hosts', "C:\\Windows\\System32\\drivers\\etc")
+#replace_hosts()

@@ -1,7 +1,6 @@
 import tkinter as tk
 from tkinter import ttk
 from tkinter.messagebox import showinfo
-#import arrange # runs whole arrange.py automatically (needs to include if __name__..)
 
 class App(tk.Tk):
     def __init__(self):
@@ -39,16 +38,55 @@ class App(tk.Tk):
                             bg='red', fg='white', padx=30)
         self.block_button.place(relx=0.8, rely=0.7, anchor='n')
 
-
     def display(self) -> None:
         self.text_box.insert(tk.END, self.entry.get() + '\n')
         self.entry.delete(0, tk.END)
 
     def read_text(self) -> None:
-        self.block_file = open("block.txt","w")
-        self.block_file.writelines(self.text_box.get("1.0", "end-1c"))
-
         
+        domains = self.text_box.get("1.0", tk.END)
+        
+        domains = domains.split("\n")
+
+        del domains[-2:]
+        
+        def change(str_: str) -> str:
+            str_ = f"127.0.0.1\t{str_}\n127.0.0.1\twww.{str_}\n"
+            return str_
+        
+        domains = list(map(change, domains))
+
+        core = '''# Copyright (c) 1993-2009 Microsoft Corp.
+#
+# This is a sample HOSTS file used by Microsoft TCP/IP for Windows.
+#
+# This file contains the mappings of IP addresses to host names. Each
+# entry should be kept on an individual line. The IP address should
+# be placed in the first column followed by the corresponding host name.
+# The IP address and the host name should be separated by at least one
+# space.
+#
+# Additionally, comments (such as these) may be inserted on individual
+# lines or following the machine name denoted by a '#' symbol.
+#
+# For example:
+#
+#      102.54.94.97     rhino.acme.com          # source server
+#       38.25.63.10     x.acme.com              # x client host
+
+# localhost name resolution is handled within DNS itself.
+#	127.0.0.1       localhost
+#	::1             localhost
+
+'''
+        
+        for x in domains:
+            core += x
+
+        file = open("hosts", "w")
+        file.writelines(core)
+        file.close()
+ # -------------------------------------------- #
 
 if __name__ == "__main__":
     app = App()
