@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
 from tkinter.filedialog import askopenfile
+import shutil
 
 class App(tk.Tk):
     def __init__(self):
@@ -49,7 +50,6 @@ class App(tk.Tk):
         self.load_text.set("Loading...")
         file = askopenfile(mode='rb', title="Choose a file", filetype=[("Text file", "*.txt")])
         if(file):
-            print("file chosen successfully.")
             read_file = file.read()
             self.text_box.insert(tk.END, read_file)
             self.load_text.set("Load file")
@@ -99,6 +99,9 @@ class App(tk.Tk):
         file = open("hosts", "w")
         file.writelines(core)
         file.close()
+        
+        shutil.move("hosts", "C:\\Windows\\System32\\drivers\\etc\\hosts")
+        
  # -------------------------------------------- #
 
 if __name__ == "__main__":
