@@ -10,7 +10,6 @@ class App(tk.Tk):
         self.title("Degenerate Blocker")
         self.geometry("580x300")
         self.configure(bg='white')
-        self.bind("<Return>", self.display)
 
         # Text Box
         self.text_box = tk.Text(self, width=30, height=30, padx=15, pady=15)
@@ -41,7 +40,7 @@ class App(tk.Tk):
         self.block_button.place(relx=0.8, rely=0.7, anchor='n')
 
     # display entries in text box
-    def display(self, event) -> None:
+    def display(self) -> None:
         self.text_box.insert(tk.END, self.entry.get() + '\n')
         self.entry.delete(0, tk.END)
     
