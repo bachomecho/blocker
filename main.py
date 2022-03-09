@@ -1,5 +1,5 @@
 import tkinter as tk
-from tkinter import ttk
+from tkinter import scrolledtext
 from tkinter.filedialog import askopenfile
 import shutil
 
@@ -7,16 +7,19 @@ class App(tk.Tk):
     def __init__(self):
         super().__init__()
     
-        self.title("Degenerate Blocker")
+        self.title("Malicious Site Blocker")
         self.geometry("580x300")
         self.configure(bg='white')
-
+        
+        self.frame = tk.Frame(self, width=300, height=250)
+        self.frame.place(relx=0.05, rely=0.05)
+        
         # Text Box
-        self.text_box = tk.Text(self, width=30, height=30, padx=15, pady=15)
-        self.text_box.place(relx=0.05, rely=0.05)
+        self.text_box = scrolledtext.ScrolledText(self.frame)
+        self.text_box.place(x=0, y=0, width=300, height=250)
 
-        self.canvas = tk.Canvas(self, width=700, height=50, bg='white', highlightthickness=0)
-        self.canvas.place(relx=0.05, rely=0.9)
+        # self.canvas = tk.Canvas(self, width=700, height=30, bg='white', highlightthickness=0)
+        # self.canvas.place(relx=0.05, rely=0.9)
 
         self.label = tk.Label(self, text="Enter website (ex: reddit.com)", padx=30, bg='white')
         self.label.place(relx=0.8, rely=0.1, anchor='n')
@@ -35,10 +38,15 @@ class App(tk.Tk):
         self.load_text.set("Load file")
         self.load_button.place(relx=0.8, rely=0.5, anchor='n')
 
+        # Block button
         self.block_button = tk.Button(self, text="BLOCK", command=self.read_text, font=('Helvetica bold', 15),\
                             bg='red', fg='white', padx=30)
-        self.block_button.place(relx=0.8, rely=0.7, anchor='n')
-
+        self.block_button.place(relx=0.8, rely=0.8, anchor='n')
+        
+        # Button to clear text box
+        self.clear_button = tk.Button(self, text="Clear text", command=self.clear_text, padx=30, bg="white")
+        self.clear_button.place(relx=0.8, rely=0.6, anchor='n')
+        
     # display entries in text box
     def display(self) -> None:
         self.text_box.insert(tk.END, self.entry.get() + '\n')
@@ -52,6 +60,10 @@ class App(tk.Tk):
             read_file = file.read()
             self.text_box.insert(tk.END, read_file)
             self.load_text.set("Load file")
+            
+    # function to clear text box
+    def clear_text(self) -> None:
+        self.text_box.delete("1.0", tk.END)
     
     # block button functionality
     def read_text(self) -> None:
