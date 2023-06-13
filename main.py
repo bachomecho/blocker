@@ -18,9 +18,6 @@ class App(tk.Tk):
         self.text_box = scrolledtext.ScrolledText(self.frame)
         self.text_box.place(x=0, y=0, width=300, height=250)
 
-        # self.canvas = tk.Canvas(self, width=700, height=30, bg='white', highlightthickness=0)
-        # self.canvas.place(relx=0.05, rely=0.9)
-
         self.label = tk.Label(self, text="Enter website (ex: reddit.com)", padx=30, bg='white')
         self.label.place(relx=0.8, rely=0.1, anchor='n')
         
@@ -56,7 +53,7 @@ class App(tk.Tk):
     def load_file(self) -> None:
         self.load_text.set("Loading...")
         file = askopenfile(mode='rb', title="Choose a file", filetype=[("Text file", "*.txt")])
-        if(file):
+        if file:
             read_file = file.read()
             self.text_box.insert(tk.END, read_file)
             self.load_text.set("Load file")
@@ -83,13 +80,12 @@ class App(tk.Tk):
             core += x
 
         print(core)
-        # file = open("hosts", "w")
-        # file.writelines(core)
-        # file.close()
+        file = open("hosts", "w")
+        file.writelines(core)
+        file.close()
         
-        # shutil.move("hosts", "C:\\Windows\\System32\\drivers\\etc\\hosts")
+        shutil.move("hosts", "C:\\Windows\\System32\\drivers\\etc\\hosts")
         
- # -------------------------------------------- #
 
 if __name__ == "__main__":
     app = App()
