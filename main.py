@@ -74,11 +74,7 @@ class App(tk.Tk):
 
         domains = [x for x in domains if len(x) > 0]
         
-        def change(str_: str) -> str:
-            str_ = f"\n127.0.0.1\t{str_}\n127.0.0.1\twww.{str_}\n"
-            return str_
-        
-        domains = list(map(change, domains))
+        domains = list(map(lambda x: f"\n127.0.0.1\t{x}\n127.0.0.1\twww.{x}\n", domains))
 
         with open("hosts_file.txt", "r") as f:
             core = f.read()
